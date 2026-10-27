@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpendWise | Expense Tracker</title>
+  <meta name="description" content="Track income, expenses and savings with SpendWise." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="brand" href="#">
+        <span class="brand-icon">S</span>
+        <span>SpendWise<small>PERSONAL FINANCE</small></span>
+      </a>
+
+      <p class="nav-label">WORKSPACE</p>
+      <a class="nav-item active" href="#dashboard">▦ <span>Dashboard</span></a>
+      <a class="nav-item" href="#transactions">↔ <span>Transactions</span></a>
+      <a class="nav-item" href="#analytics">▥ <span>Analytics</span></a>
+
+      <div class="sidebar-bottom">
+        <div class="tip-card">
+          <span class="tip-icon">✦</span>
+          <strong>Small steps, big savings.</strong>
+          <p>Keep track of your spending and build better money habits.</p>
+        </div>
+        <p class="sidebar-footer">SpendWise v1.0 · Your money, your control.</p>
+      </div>
+    </aside>
+
+    <main class="main" id="dashboard">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">YOUR FINANCIAL OVERVIEW</p>
+          <h1>Dashboard</h1>
+          <p class="muted">Welcome back! Here's your money at a glance.</p>
+        </div>
+        <div class="top-actions">
+          <span class="today" id="today"></span>
+          <button class="primary-btn" id="openFormBtn">＋ Add transaction</button>
+        </div>
+      </header>
+
+      <section class="summary-grid">
+        <article class="summary-card balance-card">
+          <div class="card-top">
+            <span>Total balance</span><span class="metric-icon">◈</span>
+          </div>
+          <h2 id="totalBalance">₹0.00</h2>
+          <p class="card-note">Income minus expenses</p>
+          <div class="balance-decoration"></div>
+        </article>
+
+        <article class="summary-card">
+          <div class="card-top">
+            <span>Total income</span><span class="metric-icon green">↙</span>
+          </div>
+          <h2 id="totalIncome">₹0.00</h2>
+          <p class="card-note"><span class="dot green-dot"></span> Money received</p>
+        </article>
+
+        <article class="summary-card">
+          <div class="card-top">
+            <span>Total expenses</span><span class="metric-icon red">↗</span>
+          </div>
+          <h2 id="totalExpenses">₹0.00</h2>
+          <p class="card-note"><span class="dot red-dot"></span> Money spent</p>
+        </article>
+
+        <article class="summary-card">
+          <div class="card-top">
+            <span>Savings rate</span><span class="metric-icon purple">％</span>
+          </div>
+          <h2 id="savingsRate">0%</h2>
+          <p class="card-note">Based on your total income</p>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel chart-panel" id="analytics">
+          <div class="panel-heading">
+            <div>
+              <h3>Spending overview</h3>
+              <p class="muted">Where your money goes</p>
+            </div>
+            <select id="chartPeriod" aria-label="Chart period">
+              <option value="month">This month</option>
+              <option value="all">All time</option>
+            </select>
+          </div>
+          <div id="spendingChart" class="chart-area"></div>
+          <div id="chartLegend" class="chart-legend"></div>
+        </article>
+
+        <article class="panel form-panel" id="transactionFormPanel">
+          <div class="panel-heading">
+            <div>
+              <h3 id="formHeading">Add transaction</h3>
+              <p class="muted">Record your money activity</p>
+            </div>
+            <span class="form-symbol">＋</span>
+          </div>
+
+          <form id="transactionForm">
+            <label for="description">Description</label>
+            <input id="description" name="description"
+              placeholder="e.g. Grocery shopping" maxlength="80" required />
+
+            <label>Transaction type</label>
+            <div class="type-toggle">
+              <label class="type-option">
+                <input type="radio" name="type" value="expense" checked />
+                <span>− Expense</span>
+              </label>
+              <label class="type-option">
+                <input type="radio" name="type" value="income" />
+                <span>＋ Income</span>
+              </label>
+            </div>
+
+            <label for="amount">Amount (₹)</label>
+            <input id="amount" name="amount" type="number"
+              placeholder="0.00" min="0.01" max="1000000000"
+              step="0.01" required />
+
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+              <option value="Food">🍜 Food</option>
+              <option value="Transport">🚗 Transport</option>
+              <option value="Shopping">🛍 Shopping</option>
+              <option value="Bills">🧾 Bills</option>
+              <option value="Education">📚 Education</option>
+              <option value="Health">💊 Health</option>
+              <option value="Entertainment">🎬 Entertainment</option>
+              <option value="Salary">💼 Salary</option>
+              <option value="Freelance">💻 Freelance</option>
+              <option value="Other">✦ Other</option>
+            </select>
+
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" required />
+
+            <button class="primary-btn submit-btn" type="submit">
+              Save transaction →
+            </button>
+            <button class="cancel-btn hidden" type="button" id="cancelEditBtn">
+              Cancel editing
+            </button>
+            <p id="formMessage" class="form-message" role="status"></p>
+          </form>
+        </article>
+      </section>
+
+      <section class="panel transactions-panel" id="transactions">
+        <div class="panel-heading transaction-heading">
+          <div>
+            <h3>Recent transactions</h3>
+            <p class="muted">Your latest income and expenses</p>
+          </div>
+          <div class="filters">
+            <input id="searchInput" type="search"
+              placeholder="Search transactions..." aria-label="Search transactions" />
+            <select id="typeFilter" aria-label="Filter by transaction type">
+              <option value="all">All types</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>TRANSACTION</th>
+                <th>CATEGORY</th>
+                <th>DATE</th>
+                <th>AMOUNT</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="transactionList"></tbody>
+          </table>
+        </div>
+        <p id="emptyState" class="empty-state">
+          No transactions yet. Add your first transaction to get started.
+        </p>
+        <div class="table-footer" id="tableFooter"></div>
+      </section>
+
+      <footer class="main-footer">
+        <span>© <span id="year"></span> SpendWise</span>
+        <span>Your financial data stays in this browser.</span>
+      </footer>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
